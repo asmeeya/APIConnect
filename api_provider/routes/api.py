@@ -1,6 +1,10 @@
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
-from ..services.api_service import FeatureService, make_response
+
+try:
+    from services.api_service import FeatureService, make_response
+except ImportError:
+    from ..services.api_service import FeatureService, make_response
 
 api_bp = Blueprint("api", __name__, url_prefix="/api")
 

@@ -1,6 +1,11 @@
 from flask import Blueprint, render_template, redirect, url_for, session
-from ..models.user import User
-from ..models.api_data import Feature
+
+try:
+    from models.user import User
+    from models.api_data import Feature
+except ImportError:
+    from ..models.user import User
+    from ..models.api_data import Feature
 
 dashboard_bp = Blueprint("dashboard", __name__)
 

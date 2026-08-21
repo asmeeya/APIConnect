@@ -1,5 +1,9 @@
 from datetime import datetime
-from . import db
+
+try:
+    from models import db
+except ImportError:
+    from . import db
 
 class Feature(db.Model):
     """

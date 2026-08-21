@@ -1,6 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
-from .auth import login_required
-from ..services.api_client import ApiClientService
+
+try:
+    from routes.auth import login_required
+    from services.api_client import ApiClientService
+except ImportError:
+    from .auth import login_required
+    from ..services.api_client import ApiClientService
 
 dashboard_bp = Blueprint("dashboard", __name__)
 

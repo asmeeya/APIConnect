@@ -1,6 +1,10 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
+
+try:
+    from models import db
+except ImportError:
+    from . import db
 
 class ClientUser(db.Model):
     """User account model for Project 2 Client Application."""

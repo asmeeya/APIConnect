@@ -1,9 +1,15 @@
 import re
 from typing import Tuple, Dict, Any, Optional, List
 from flask import jsonify, Response
-from ..models import db
-from ..models.user import User
-from ..models.api_data import Feature
+
+try:
+    from models import db
+    from models.user import User
+    from models.api_data import Feature
+except ImportError:
+    from ..models import db
+    from ..models.user import User
+    from ..models.api_data import Feature
 
 def make_response(success: bool, message: str, data: Any = None, errors: Optional[List[str]] = None, status_code: int = 200) -> Tuple[Response, int]:
     """Generate uniform JSON response format across all API endpoints."""

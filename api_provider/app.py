@@ -1,15 +1,33 @@
 import os
+import sys
+
+# Ensure local directory is in python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from .config import Config, ProductionConfig, DevelopmentConfig
-from .models import db
-from .models.user import User
-from .models.api_data import Feature
-from .routes.auth import auth_bp
-from .routes.api import api_bp
-from .routes.dashboard import dashboard_bp
-from .services.api_service import make_response
+
+try:
+    from config import Config, ProductionConfig, DevelopmentConfig
+    from models import db
+    from models.user import User
+    from models.api_data import Feature
+    from routes.auth import auth_bp
+    from routes.api import api_bp
+    from routes.dashboard import dashboard_bp
+    from services.api_service import make_response
+except ImportError:
+    from .config import Config, ProductionConfig, DevelopmentConfig
+    from .models import db
+    from .models.user import User
+    from .models.api_data import Feature
+    from .routes.auth import auth_bp
+    from .routes.api import api_bp
+    from .routes.dashboard import dashboard_bp
+    from .services.api_service import make_response
 
 def create_app(config_class=None):
     """Application Factory for Flask REST API Provider."""

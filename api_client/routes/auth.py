@@ -1,8 +1,14 @@
 from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from ..models import db
-from ..models.user import ClientUser
-from ..services.api_client import ApiClientService
+
+try:
+    from models import db
+    from models.user import ClientUser
+    from services.api_client import ApiClientService
+except ImportError:
+    from ..models import db
+    from ..models.user import ClientUser
+    from ..services.api_client import ApiClientService
 
 auth_bp = Blueprint("auth", __name__)
 

@@ -1,6 +1,10 @@
 from flask import Blueprint, request
 from flask_jwt_extended import create_access_token
-from ..services.api_service import AuthService, make_response
+
+try:
+    from services.api_service import AuthService, make_response
+except ImportError:
+    from ..services.api_service import AuthService, make_response
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
