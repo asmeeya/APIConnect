@@ -1,0 +1,31 @@
+/* Custom styles for API Client Consumer */
+:root {
+    --bs-primary: #2563eb;
+    --bs-primary-rgb: 37, 99, 235;
+}
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+}
+
+.table th {
+    font-size: 0.825rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.border-start-md {
+    border-left: 1px solid #e2e8f0;
+}
+
+@media (max-width: 767.98px) {
+    .border-start-md {
+        border-left: none;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 1rem;
+        margin-top: 1rem;
+    }
+}

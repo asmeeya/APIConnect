@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Flask REST API Provider{% endblock %}
+
+{% block content %}
+<div class="row align-items-center mb-5 pt-3">
+    <div class="col-lg-7">
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill mb-3">
+            <i class="bi bi-shield-check me-1"></i> Microservice Architecture (Project 1)
+        </span>
+        <h1 class="display-5 fw-bold text-dark mb-3">Robust Flask REST API Provider</h1>
+        <p class="lead text-secondary mb-4">
+            A high-performance, modular backend API service designed to power client dashboards. Features stateless JWT token authentication, SQLite persistence via SQLAlchemy, structured JSON responses, and Render-ready deployment configuration.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+            <a href="{{ url_for('dashboard.api_docs') }}" class="btn btn-primary btn-lg shadow-sm">
+                <i class="bi bi-journal-code me-2"></i> Explore API Documentation
+            </a>
+            <a href="{{ url_for('dashboard.admin_dashboard') }}" class="btn btn-outline-secondary btn-lg">
+                <i class="bi bi-bar-chart-line me-2"></i> System Metrics
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-5 mt-4 mt-lg-0">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card-header bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-danger rounded-circle p-1"></span>
+                    <span class="badge bg-warning rounded-circle p-1"></span>
+                    <span class="badge bg-success rounded-circle p-1"></span>
+                    <span class="small font-monospace ms-2">Live Service Telemetry</span>
+                </div>
+                <span class="badge bg-success">Online</span>
+            </div>
+            <div class="card-body p-4 bg-white">
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span class="text-muted"><i class="bi bi-people me-2"></i> Registered API Users</span>
+                    <span class="fw-bold fs-5 text-primary">{{ total_users }}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span class="text-muted"><i class="bi bi-layers me-2"></i> Business Features</span>
+                    <span class="fw-bold fs-5 text-success">{{ total_features }}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span class="text-muted"><i class="bi bi-key me-2"></i> Auth Protocol</span>
+                    <span class="badge bg-dark">JWT (Bearer)</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center pt-2">
+                    <span class="text-muted"><i class="bi bi-database me-2"></i> Database Engine</span>
+                    <span class="badge bg-secondary">SQLite 3 / SQLAlchemy</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm p-3 rounded-3">
+            <div class="card-body">
+                <div class="feature-icon bg-primary bg-gradient text-white rounded-3 p-3 mb-3 d-inline-block">
+                    <i class="bi bi-shield-lock fs-4"></i>
+                </div>
+                <h5 class="fw-bold">JWT Security</h5>
+                <p class="text-secondary small mb-0">
+                    Stateless token authentication using Flask-JWT-Extended. Protected write routes require valid Bearer token headers.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm p-3 rounded-3">
+            <div class="card-body">
+                <div class="feature-icon bg-success bg-gradient text-white rounded-3 p-3 mb-3 d-inline-block">
+                    <i class="bi bi-braces-asterisk fs-4"></i>
+                </div>
+                <h5 class="fw-bold">Standardized JSON</h5>
+                <p class="text-secondary small mb-0">
+                    Strict response formatting with boolean success indicators, clear human messages, structured data bodies, and actionable error arrays.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm p-3 rounded-3">
+            <div class="card-body">
+                <div class="feature-icon bg-info bg-gradient text-white rounded-3 p-3 mb-3 d-inline-block">
+                    <i class="bi bi-cloud-arrow-up fs-4"></i>
+                </div>
+                <h5 class="fw-bold">Render Production Ready</h5>
+                <p class="text-secondary small mb-0">
+                    Pre-configured with dynamic PORT bindings, Gunicorn multi-worker concurrency, and modular WSGI factory pattern.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Flask API Client Dashboard{% endblock %}
+
+{% block content %}
+<!-- Header Bar -->
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h2 class="fw-bold mb-1">Client Application Dashboard</h2>
+        <p class="text-secondary small mb-0">Authenticated as <strong>{{ user_name }}</strong> (<code>{{ user_email }}</code>)</p>
+    </div>
+    <div class="d-flex gap-2 mt-3 mt-md-0">
+        <a href="{{ url_for('dashboard.feature_list') }}" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-layers me-1"></i> View All Features
+        </a>
+        <a href="{{ url_for('dashboard.add_feature') }}" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-lg me-1"></i> Create New Feature
+        </a>
+    </div>
+</div>
+
+<!-- API Provider Connectivity Status -->
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card-body p-4">
+        <div class="row align-items-center g-3">
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <div class="p-3 rounded-circle me-3 {% if is_online %}bg-success-subtle text-success{% else %}bg-danger-subtle text-danger{% endif %}">
+                        <i class="bi {% if is_online %}bi-broadcast-pin{% else %}bi-slash-circle{% endif %} fs-3"></i>
+                    </div>
+                    <div>
+                        <span class="text-muted small fw-semibold">Target API Provider Connection</span>
+                        <h5 class="fw-bold mb-0 {% if is_online %}text-success{% else %}text-danger{% endif %}">
+                            {% if is_online %}Online &amp; Operational{% else %}Offline / Disconnected{% endif %}
+                        </h5>
+                        <div class="small text-muted font-monospace">{{ api_base_url }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 border-start-md">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-semibold">Session JWT Authentication</span>
+                        <div class="fw-bold {% if has_jwt %}text-success{% else %}text-warning{% endif %}">
+                            {% if has_jwt %}
+                                <i class="bi bi-shield-check me-1"></i> Bearer Token Active
+                            {% else %}
+                                <i class="bi bi-shield-slash me-1"></i> No Token in Session
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div>
+                        <form action="{{ url_for('dashboard.sync_token') }}" method="POST">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-arrow-repeat me-1"></i> Quick Re-Sync JWT
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Metrics Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-3 p-3">
+            <div class="d-flex align-items-center">
+                <div class="bg-primary-subtle text-primary p-3 rounded-3 me-3">
+                    <i class="bi bi-collection-fill fs-3"></i>
+                </div>
+                <div>
+                    <span class="text-muted small fw-semibold">Total Records Consumed</span>
+                    <h3 class="fw-bold mb-0 text-dark">{{ total_records }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-3 p-3">
+            <div class="d-flex align-items-center">
+                <div class="bg-success-subtle text-success p-3 rounded-3 me-3">
+                    <i class="bi bi-check2-circle fs-3"></i>
+                </div>
+                <div>
+                    <span class="text-muted small fw-semibold">Categories Detected</span>
+                    <h3 class="fw-bold mb-0 text-dark">{{ category_counts|length }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-3 p-3">
+            <div class="d-flex align-items-center">
+                <div class="bg-info-subtle text-info p-3 rounded-3 me-3">
+                    <i class="bi bi-cpu fs-3"></i>
+                </div>
+                <div>
+                    <span class="text-muted small fw-semibold">Data Source</span>
+                    <h5 class="fw-bold mb-0 text-dark">Project 1 REST API</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Records Consumed from Project 1 -->
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0 text-dark">
+            <i class="bi bi-arrow-down-left-square me-2 text-primary"></i> Live Records Fetched from Project 1
+        </h5>
+        <a href="{{ url_for('dashboard.feature_list') }}" class="btn btn-sm btn-link text-decoration-none">
+            View All Features &rarr;
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 60px;">ID</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in recent_features %}
+                <tr>
+                    <td class="fw-bold text-muted">#{{ item.id }}</td>
+                    <td class="fw-semibold text-dark">{{ item.title }}</td>
+                    <td><span class="badge bg-light text-dark border">{{ item.category }}</span></td>
+                    <td>
+                        {% if item.status == 'Active' %}
+                            <span class="badge bg-success-subtle text-success border border-success-subtle">Active</span>
+                        {% elif item.status == 'Pending' %}
+                            <span class="badge bg-warning-subtle text-warning border border-warning-subtle">Pending</span>
+                        {% else %}
+                            <span class="badge bg-secondary-subtle text-secondary border">{{ item.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <a href="{{ url_for('dashboard.edit_feature', feature_id=item.id) }}" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center py-4 text-muted">
+                        No features fetched. Make sure Project 1 API Provider is running.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

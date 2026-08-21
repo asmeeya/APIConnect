@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Add Feature - Flask API Client{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-2">
+    <div class="col-lg-8">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="fw-bold mb-0">Create New Feature in Project 1</h3>
+            <a href="{{ url_for('dashboard.feature_list') }}" class="btn btn-outline-secondary btn-sm">
+                &larr; Back to Features
+            </a>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4 p-md-5">
+                <div class="alert alert-info border-0 shadow-sm mb-4 small">
+                    <i class="bi bi-info-circle-fill me-2"></i> Submitting this form will make an authenticated <code>POST /api/features</code> request to Project 1 using your active Bearer JWT token.
+                </div>
+
+                <form method="POST" action="{{ url_for('dashboard.add_feature') }}">
+                    <div class="mb-3">
+                        <label for="title" class="form-label fw-semibold small">Feature Title <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ title or '' }}" required placeholder="e.g. Automated Email Webhooks">
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="category" class="form-label fw-semibold small">Category</label>
+                            <input type="text" class="form-control" id="category" name="category" value="{{ category or 'General' }}" placeholder="e.g. Security, Payments, AI, Analytics">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="status" class="form-label fw-semibold small">Initial Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="Active" {% if status == 'Active' %}selected{% endif %}>Active</option>
+                                <option value="Pending" {% if status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Inactive" {% if status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                                <option value="Archived" {% if status == 'Archived' %}selected{% endif %}>Archived</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="description" class="form-label fw-semibold small">Detailed Description <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required placeholder="Describe the technical scope and capabilities of this feature...">{{ description or '' }}</textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ url_for('dashboard.feature_list') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4 fw-semibold shadow-sm">
+                            <i class="bi bi-cloud-upload me-1"></i> Submit to Project 1 API
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

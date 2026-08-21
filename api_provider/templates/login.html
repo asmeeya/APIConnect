@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In / Generate JWT - Flask REST API Provider{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-3">
+    <div class="col-md-6 col-lg-5">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="bg-primary-subtle text-primary p-3 rounded-circle d-inline-flex mb-3">
+                        <i class="bi bi-key-fill fs-3"></i>
+                    </div>
+                    <h3 class="fw-bold">API Provider Authentication</h3>
+                    <p class="text-muted small">Sign in to test credentials and retrieve a JWT Bearer token.</p>
+                </div>
+
+                <div id="loginAlert" class="alert d-none" role="alert"></div>
+
+                <form id="providerLoginForm" onsubmit="handleProviderLogin(event)">
+                    <div class="mb-3">
+                        <label for="loginEmail" class="form-label small fw-semibold">Email Address</label>
+                        <input type="email" class="form-control" id="loginEmail" value="admin@example.com" required placeholder="name@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label small fw-semibold">Password</label>
+                        <input type="password" class="form-control" id="loginPassword" value="Admin@123456" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" id="loginBtn" class="btn btn-primary w-100 py-2 fw-semibold">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Authenticate &amp; Get Token
+                    </button>
+                </form>
+
+                <div class="mt-4 pt-3 border-top text-center">
+                    <span class="text-muted small">Don't have an account?</span>
+                    <a href="{{ url_for('dashboard.register_page') }}" class="small fw-semibold text-decoration-none ms-1">Register New User</a>
+                </div>
+
+                <div id="tokenResultBox" class="mt-4 d-none">
+                    <h6 class="fw-bold text-success"><i class="bi bi-check-circle-fill me-1"></i> JWT Token Issued:</h6>
+                    <div class="position-relative">
+                        <textarea id="jwtOutput" class="form-control font-monospace small bg-light" rows="3" readonly></textarea>
+                        <button class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 m-2" onclick="copyToken()">
+                            <i class="bi bi-clipboard"></i> Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

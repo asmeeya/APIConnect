@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In - Flask API Client Dashboard{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-3">
+    <div class="col-md-6 col-lg-5">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="bg-primary-subtle text-primary p-3 rounded-circle d-inline-flex mb-3">
+                        <i class="bi bi-shield-lock-fill fs-3"></i>
+                    </div>
+                    <h3 class="fw-bold">Client Sign In</h3>
+                    <p class="text-muted small">Sign in to authenticate with Client SQLite and Project 1 API Provider.</p>
+                </div>
+
+                <form method="POST" action="{{ url_for('auth.login', next=request.args.get('next')) }}">
+                    <div class="mb-3">
+                        <label for="email" class="form-label small fw-semibold">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ email or 'client@example.com' }}" required placeholder="name@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label small fw-semibold">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" value="Client@123456" required placeholder="Enter password">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold shadow-sm">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Dashboard
+                    </button>
+                </form>
+
+                <div class="card bg-light border-0 rounded-3 p-3 mt-4 small">
+                    <div class="fw-bold text-dark mb-1"><i class="bi bi-info-circle text-primary me-1"></i> Demo Credentials:</div>
+                    <div class="d-flex justify-content-between text-muted">
+                        <span>Email: <code>client@example.com</code></span>
+                        <span>Pass: <code>Client@123456</code></span>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <span class="text-muted small">Need an account?</span>
+                    <a href="{{ url_for('auth.register') }}" class="small fw-semibold text-decoration-none ms-1">Register Here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

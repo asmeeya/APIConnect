@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block title %}API Documentation - Flask REST API Provider{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">REST API Interactive Documentation</h2>
+        <p class="text-secondary small mb-0">Endpoints, schemas, HTTP status codes, and test payloads for the Flask REST API Provider.</p>
+    </div>
+    <span class="badge bg-primary px-3 py-2">OpenAPI / JSON Compliant</span>
+</div>
+
+<!-- Token Header Configuration Bar -->
+<div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
+    <div class="card-body p-4">
+        <div class="row align-items-center g-3">
+            <div class="col-md-3">
+                <label for="activeJwtToken" class="form-label small fw-bold mb-0">
+                    <i class="bi bi-key-fill text-warning me-1"></i> Active Bearer Token:
+                </label>
+                <div class="form-text small">Used automatically for interactive test buttons.</div>
+            </div>
+            <div class="col-md-7">
+                <input type="text" id="activeJwtToken" class="form-control font-monospace small" placeholder="Paste your JWT Token here, or sign in to auto-populate">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-primary w-100 btn-sm" onclick="autoFillAdminToken()">
+                    <i class="bi bi-magic me-1"></i> Quick Sign-In
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Endpoints Accordion -->
+<div class="accordion mb-4" id="apiEndpointsAccordion">
+
+    <!-- 1. POST /api/auth/register -->
+    <div class="accordion-item border-0 shadow-sm rounded-3 mb-3 overflow-hidden">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#docRegister">
+                <span class="badge bg-success me-3">POST</span>
+                <span class="font-monospace fw-bold text-dark">/api/auth/register</span>
+                <span class="text-muted small ms-3 d-none d-md-inline">— Register new user account</span>
+                <span class="badge bg-light text-muted border ms-auto me-2">Public</span>
+            </button>
+        </h2>
+        <div id="docRegister" class="accordion-collapse collapse" data-bs-parent="#apiEndpointsAccordion">
+            <div class="accordion-body bg-light border-top">
+                <p class="small text-secondary">Creates a new user record in SQLite with a securely salted password hash using Werkzeug.</p>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold small">Request JSON Payload:</h6>
+                        <pre class="bg-dark text-light p-3 rounded small font-monospace"><code>{
+  "name": "Alex Smith",
+  "email": "alex@example.com",
+  "password": "Password@123"
+}</code></pre>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold small">Response JSON (201 Created):</h6>
+                        <pre class="bg-dark text-success p-3 rounded small font-monospace"><code>{
+  "success": true,
+  "message": "User registered successfully.",
+  "data": {
+    "user": {
+      "id": 2,
+      "name": "Alex Smith",
+      "email": "alex@example.com",
+      "created_at": "2026-08-21T02:10:00.000000"
+    }
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. POST /api/auth/login -->
+    <div class="accordion-item border-0 shadow-sm rounded-3 mb-3 overflow-hidden">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#docLogin">
+                <span class="badge bg-success me-3">POST</span>
+                <span class="font-monospace fw-bold text-dark">/api/auth/login</span>
+                <span class="text-muted small ms-3 d-none d-md-inline">— Authenticate user and issue JWT token</span>
+                <span class="badge bg-light text-muted border ms-auto me-2">Public</span>
+            </button>
+        </h2>
+        <div id="docLogin" class="accordion-collapse collapse" data-bs-parent="#apiEndpointsAccordion">
+            <div class="accordion-body bg-light border-top">
+                <p class="small text-secondary">Validates credentials and generates a signed JWT token valid for standard requests.</p>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold small">Request JSON Payload:</h6>
+                        <pre class="bg-dark text-light p-3 rounded small font-monospace"><code>{
+  "email": "admin@example.com",
+  "password": "Admin@123456"
+}</code></pre>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold small">Response JSON (200 OK):</h6>
+                        <pre class="bg-dark text-success p-3 rounded small font-monospace"><code>{
+  "success": true,
+  "message": "Login successful. JWT token issued.",
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6...",
+    "token_type": "Bearer",
+    "user": { "id": 1, "name": "Admin", "email": "admin@example.com" }
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. GET /api/features -->
+    <div class="accordion-item border-0 shadow-sm rounded-3 mb-3 overflow-hidden">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#docGetFeatures">
+                <span class="badge bg-primary me-3">GET</span>
+                <span class="font-monospace fw-bold text-dark">/api/features</span>
+                <span class="text-muted small ms-3 d-none d-md-inline">— Retrieve all business feature records</span>
+                <span class="badge bg-light text-muted border ms-auto me-2">Public</span>
+            </button>
+        </h2>
+        <div id="docGetFeatures" class="accordion-collapse collapse" data-bs-parent="#apiEndpointsAccordion">
+            <div class="accordion-body bg-light border-top">
+                <p class="small text-secondary">Returns an array of features. Optional query filters: <code>?category=Security</code> or <code>?status=Active</code>.</p>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold small">Query Parameters:</h6>
+                        <table class="table table-sm table-bordered bg-white small">
+                            <thead>
+                                <tr><th>Param</th><th>Type</th><th>Description</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>category</code></td><td>string</td><td>Filter by category (e.g. Finance)</td></tr>
+                                <tr><td><code>status</code></td><td>string</td><td>Active, Inactive, Pending</td></tr>
+                            </tbody>
+                        </table>
+                        <button class="btn btn-primary btn-sm mt-2" onclick="testLiveEndpoint('/api/features', 'GET')">
+                            <i class="bi bi-play-fill"></i> Execute GET /api/features
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold small">Response JSON (200 OK):</h6>
+                        <pre class="bg-dark text-success p-3 rounded small font-monospace"><code>{
+  "success": true,
+  "message": "Retrieved 5 feature(s) successfully.",
+  "data": {
+    "count": 5,
+    "features": [
+      {
+        "id": 1,
+        "title": "User Authentication Engine",
+        "category": "Security",
+        "status": "Active"
+      }
+    ]
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. POST /api/features -->
+    <div class="accordion-item border-0 shadow-sm rounded-3 mb-3 overflow-hidden">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#docPostFeatures">
+                <span class="badge bg-success me-3">POST</span>
+                <span class="font-monospace fw-bold text-dark">/api/features</span>
+                <span class="text-muted small ms-3 d-none d-md-inline">— Create a new business feature</span>
+                <span class="badge bg-warning-subtle text-dark border border-warning-subtle ms-auto me-2">JWT Required</span>
+            </button>
+        </h2>
+        <div id="docPostFeatures" class="accordion-collapse collapse" data-bs-parent="#apiEndpointsAccordion">
+            <div class="accordion-body bg-light border-top">
+                <p class="small text-secondary">Creates a new feature record. Must include header <code>Authorization: Bearer &lt;JWT&gt;</code>.</p>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold small">Request JSON Payload:</h6>
+                        <pre class="bg-dark text-light p-3 rounded small font-monospace"><code>{
+  "title": "Cloud Storage Sync",
+  "description": "Bi-directional sync with S3/GCS buckets.",
+  "category": "Infrastructure",
+  "status": "Active"
+}</code></pre>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold small">Response JSON (201 Created):</h6>
+                        <pre class="bg-dark text-success p-3 rounded small font-monospace"><code>{
+  "success": true,
+  "message": "Feature created successfully.",
+  "data": {
+    "feature": {
+      "id": 6,
+      "title": "Cloud Storage Sync",
+      "category": "Infrastructure",
+      "status": "Active"
+    }
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. PUT /api/features/<id> -->
+    <div class="accordion-item border-0 shadow-sm rounded-3 mb-3 overflow-hidden">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#docPutFeatures">
+                <span class="badge bg-warning text-dark me-3">PUT</span>
+                <span class="font-monospace fw-bold text-dark">/api/features/&lt;id&gt;</span>
+                <span class="text-muted small ms-3 d-none d-md-inline">— Update existing feature</span>
+                <span class="badge bg-warning-subtle text-dark border border-warning-subtle ms-auto me-2">JWT Required</span>
+            </button>
+        </h2>
+        <div id="docPutFeatures" class="accordion-collapse collapse" data-bs-parent="#apiEndpointsAccordion">
+            <div class="accordion-body bg-light border-top">
+                <p class="small text-secondary">Updates fields on the feature corresponding to <code>&lt;id&gt;</code>.</p>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold small">Request JSON Payload:</h6>
+                        <pre class="bg-dark text-light p-3 rounded small font-monospace"><code>{
+  "title": "Updated Feature Name",
+  "status": "Inactive"
+}</code></pre>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold small">Response JSON (200 OK):</h6>
+                        <pre class="bg-dark text-success p-3 rounded small font-monospace"><code>{
+  "success": true,
+  "message": "Feature updated successfully.",
+  "data": { "feature": { "id": 1, "status": "Inactive" } }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. DELETE /api/features/<id> -->
+    <div class="accordion-item border-0 shadow-sm rounded-3 mb-3 overflow-hidden">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed py-3" type="button" data-bs-toggle="collapse" data-bs-target="#docDeleteFeatures">
+                <span class="badge bg-danger me-3">DELETE</span>
+                <span class="font-monospace fw-bold text-dark">/api/features/&lt;id&gt;</span>
+                <span class="text-muted small ms-3 d-none d-md-inline">— Delete feature record</span>
+                <span class="badge bg-warning-subtle text-dark border border-warning-subtle ms-auto me-2">JWT Required</span>
+            </button>
+        </h2>
+        <div id="docDeleteFeatures" class="accordion-collapse collapse" data-bs-parent="#apiEndpointsAccordion">
+            <div class="accordion-body bg-light border-top">
+                <p class="small text-secondary">Removes feature record by primary key.</p>
+                <pre class="bg-dark text-success p-3 rounded small font-monospace"><code>{
+  "success": true,
+  "message": "Feature deleted successfully.",
+  "data": { "deleted_id": 1 }
+}</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Response Box -->
+<div id="liveConsoleCard" class="card border-0 shadow-sm rounded-4 d-none">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2 px-3">
+        <span class="font-monospace small"><i class="bi bi-terminal-fill me-2 text-warning"></i> Live Test Console Result</span>
+        <button class="btn btn-sm btn-link text-white text-decoration-none" onclick="document.getElementById('liveConsoleCard').classList.add('d-none')">&times; Close</button>
+    </div>
+    <div class="card-body bg-black text-white p-3">
+        <pre id="liveConsoleOutput" class="mb-0 font-monospace small" style="max-height: 250px; overflow-y: auto;"></pre>
+    </div>
+</div>
+{% endblock %}

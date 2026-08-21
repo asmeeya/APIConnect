@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Flask API Client Dashboard{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-3">
+    <div class="col-md-6 col-lg-5">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="bg-success-subtle text-success p-3 rounded-circle d-inline-flex mb-3">
+                        <i class="bi bi-person-plus-fill fs-3"></i>
+                    </div>
+                    <h3 class="fw-bold">Create Client Account</h3>
+                    <p class="text-muted small">Register a local user in Client application SQLite.</p>
+                </div>
+
+                <form method="POST" action="{{ url_for('auth.register') }}">
+                    <div class="mb-3">
+                        <label for="name" class="form-label small fw-semibold">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ name or '' }}" required placeholder="e.g. John Doe">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label small fw-semibold">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ email or '' }}" required placeholder="name@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label small fw-semibold">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" minlength="6" required placeholder="Minimum 6 characters">
+                    </div>
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="also_register_api" name="also_register_api" checked>
+                        <label class="form-check-label small text-secondary" for="also_register_api">
+                            Simultaneously register this user on Project 1 API Provider
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 py-2 fw-semibold shadow-sm">
+                        <i class="bi bi-check-lg me-1"></i> Register Client Account
+                    </button>
+                </form>
+
+                <div class="mt-4 text-center">
+                    <span class="text-muted small">Already registered?</span>
+                    <a href="{{ url_for('auth.login') }}" class="small fw-semibold text-decoration-none ms-1">Sign In</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

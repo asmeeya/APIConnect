@@ -1,0 +1,39 @@
+/* Custom Styles for Flask REST API Provider */
+:root {
+    --primary-color: #0d6efd;
+    --success-color: #198754;
+    --dark-bg: #1e293b;
+}
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #334155;
+}
+
+.feature-icon {
+    width: 3rem;
+    height: 3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+pre {
+    margin-bottom: 0;
+    border-radius: 0.5rem;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #f8fafc;
+    color: #0f172a;
+    box-shadow: none;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(13, 110, 253, 0.25);
+}
+
+.badge {
+    font-weight: 500;
+}

@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Feature Management - Flask API Client{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h2 class="fw-bold mb-1">Project 1 Feature Store</h2>
+        <p class="text-secondary small mb-0">Consuming <code>GET, POST, PUT, DELETE /api/features</code> from Project 1.</p>
+    </div>
+    <div class="d-flex gap-2 mt-3 mt-md-0">
+        <a href="{{ url_for('dashboard.feature_list') }}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-clockwise me-1"></i> Refresh Data
+        </a>
+        <a href="{{ url_for('dashboard.add_feature') }}" class="btn btn-primary btn-sm shadow-sm">
+            <i class="bi bi-plus-circle me-1"></i> Add New Feature
+        </a>
+    </div>
+</div>
+
+<!-- Filters Bar -->
+<div class="card border-0 shadow-sm rounded-3 mb-4 bg-white">
+    <div class="card-body py-3">
+        <form method="GET" action="{{ url_for('dashboard.feature_list') }}" class="row g-2 align-items-center">
+            <div class="col-md-4">
+                <input type="text" name="category" class="form-control form-control-sm" placeholder="Filter by category (e.g. Security, Finance)" value="{{ category or '' }}">
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select form-select-sm">
+                    <option value="">All Statuses</option>
+                    <option value="Active" {% if status == 'Active' %}selected{% endif %}>Active</option>
+                    <option value="Inactive" {% if status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                    <option value="Pending" {% if status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="Archived" {% if status == 'Archived' %}selected{% endif %}>Archived</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-secondary btn-sm w-100">
+                    <i class="bi bi-funnel me-1"></i> Filter
+                </button>
+            </div>
+            {% if category or status %}
+            <div class="col-md-2">
+                <a href="{{ url_for('dashboard.feature_list') }}" class="btn btn-outline-secondary btn-sm w-100">
+                    Clear Filters
+                </a>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<!-- Features Table -->
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 70px;">ID</th>
+                    <th>Title &amp; Description</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th class="text-end" style="width: 180px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in features %}
+                <tr>
+                    <td class="fw-bold text-muted">#{{ item.id }}</td>
+                    <td>
+                        <div class="fw-bold text-dark">{{ item.title }}</div>
+                        <div class="text-secondary small text-truncate" style="max-width: 380px;">{{ item.description }}</div>
+                    </td>
+                    <td>
+                        <span class="badge bg-light text-dark border">{{ item.category }}</span>
+                    </td>
+                    <td>
+                        {% if item.status == 'Active' %}
+                            <span class="badge bg-success-subtle text-success border border-success-subtle">Active</span>
+                        {% elif item.status == 'Pending' %}
+                            <span class="badge bg-warning-subtle text-warning border border-warning-subtle">Pending</span>
+                        {% elif item.status == 'Inactive' %}
+                            <span class="badge bg-secondary-subtle text-secondary border">Inactive</span>
+                        {% else %}
+                            <span class="badge bg-dark-subtle text-dark border">{{ item.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-muted small">
+                        {{ item.created_at[:10] if item.created_at else 'N/A' }}
+                    </td>
+                    <td class="text-end">
+                        <div class="btn-group btn-group-sm">
+                            <a href="{{ url_for('dashboard.edit_feature', feature_id=item.id) }}" class="btn btn-outline-primary" title="Edit Feature">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <button type="button" class="btn btn-outline-danger" title="Delete Feature" onclick="openDeleteModal({{ item.id }}, '{{ item.title|replace('\'', '\\\'') }}')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center py-5">
+                        <div class="text-muted mb-3">
+                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                            No features found matching the criteria.
+                        </div>
+                        <a href="{{ url_for('dashboard.add_feature') }}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-circle me-1"></i> Add the First Feature
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Confirmation for Delete -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i> Confirm Delete</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p>Are you sure you want to permanently delete feature <strong id="deleteFeatureTitle"></strong>?</p>
+                <div class="alert alert-warning small mb-0">
+                    <i class="bi bi-info-circle me-1"></i> This will send a <code>DELETE /api/features/&lt;id&gt;</code> request with your JWT token to Project 1.
+                </div>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteFeatureForm" method="POST" action="">
+                    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

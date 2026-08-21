@@ -1,0 +1,6 @@
+{
+  "name": "Flask REST API Provider & Client System",
+  "description": "Production-ready two-project Flask system with REST API Provider (JWT, SQLAlchemy, SQLite, Render deployment) and API Consumer Client Dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

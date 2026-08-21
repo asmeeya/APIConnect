@@ -1,0 +1,20 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+venv/
+env/
+.env
+.env.local
+
+# SQLite Databases
+instance/*.db
+*.sqlite3
+
+# Distribution
+dist/
+build/
+*.egg-info/
+.DS_Store

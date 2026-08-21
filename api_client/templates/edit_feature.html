@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Feature #{{ feature.id }} - Flask API Client{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-2">
+    <div class="col-lg-8">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="fw-bold mb-0">Edit Feature #{{ feature.id }}</h3>
+            <a href="{{ url_for('dashboard.feature_list') }}" class="btn btn-outline-secondary btn-sm">
+                &larr; Back to Features
+            </a>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4 p-md-5">
+                <div class="alert alert-warning border-0 shadow-sm mb-4 small">
+                    <i class="bi bi-shield-check me-2"></i> Submitting updates will execute a <code>PUT /api/features/{{ feature.id }}</code> request with your JWT token.
+                </div>
+
+                <form method="POST" action="{{ url_for('dashboard.edit_feature', feature_id=feature.id) }}">
+                    <div class="mb-3">
+                        <label for="title" class="form-label fw-semibold small">Feature Title <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{ feature.title }}" required>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="category" class="form-label fw-semibold small">Category</label>
+                            <input type="text" class="form-control" id="category" name="category" value="{{ feature.category }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="status" class="form-label fw-semibold small">Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="Active" {% if feature.status == 'Active' %}selected{% endif %}>Active</option>
+                                <option value="Pending" {% if feature.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Inactive" {% if feature.status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                                <option value="Archived" {% if feature.status == 'Archived' %}selected{% endif %}>Archived</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="description" class="form-label fw-semibold small">Detailed Description <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required>{{ feature.description }}</textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted small">Record ID: #{{ feature.id }}</span>
+                        <div class="d-flex gap-2">
+                            <a href="{{ url_for('dashboard.feature_list') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold shadow-sm">
+                                <i class="bi bi-check2-circle me-1"></i> Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
